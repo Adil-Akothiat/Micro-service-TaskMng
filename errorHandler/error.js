@@ -1,9 +1,9 @@
 const errorHandler = (fn) => {
-  return async (req, res) => {
+  return async (request, response) => {
     try {
       await fn();
     } catch (error) {
-      return res.status(400).json({ message: error.message });
+      return response.status(400).json({ message: error.message });
     }
   };
 };
