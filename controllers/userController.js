@@ -58,7 +58,7 @@ const updateUser = async (req, res) => {
           return res.status(400).json({ message: "Block update" });
         }
       
-        const update_user = await User.updateOne({"id":req.params._id},
+        const update_user = await User.updateOne({_id:req.params.id},
             {$set : { username, email, role }}
         );
     
@@ -76,13 +76,17 @@ const updateUser = async (req, res) => {
 
   const deleteUser = async (req, res) => {
     try {
-        const delete_user = await User.deleteOne({'id' : req.params._id} ,{})
-        res.send({message:"delete success",delete_user})
-        
+        const delete_user = await User.deleteOne({ _id: req.params.id });
+
+        if (delete_user.deletedCount === 0) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        res.json({ message: "Delete success", delete_user });
     } catch (err) {
         res.status(500).json({ message: err.message });
     }
-  };
+};
   
 
 
