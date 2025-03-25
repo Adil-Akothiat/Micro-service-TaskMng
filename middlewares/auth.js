@@ -16,16 +16,16 @@ const verifyToken = (req, res, next) => {
       req.user = verify; 
     next(); 
   } catch (err) {
-    return res.status(401).json({ message: "Token invalide ou expiré" });
+    return res.status(401).json({ message: "Token invalide" });
   }
 };
 
+const checkRole = (roles)=>(req , res , next)=>{
+  if(!roles.includes(req.user.role)){
+    return res.status(400).json({message:"No entry"})
+  }
+  next();
+}
 
-const checkRole = (roles) => (req, res, next) => {
-    if (!roles.includes(req.user.role)) {
-      return res.status(403).json({ message: "Accès interdit" });
-    }
-    next();
-  };
 
 module.exports = {verifyToken , checkRole};

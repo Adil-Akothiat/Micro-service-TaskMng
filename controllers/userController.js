@@ -42,46 +42,74 @@ const login = async (req, res) => {
 };
 
 const getUser = async (req, res) => {
-    const users = await User.find();
-    res.json(users);
-  };
+    try {
+        const users = await User.find();
+        res.json(users);
+    }catch (err) {
+        res.status(500).json({ message: err.message });
+      }
+};
   
-  const updateUser = async (req, res) => {
-    const { username, email, role } = req.body;
+const updateUser = async (req, res) => {
+    try{
+        const { username, email, role } = req.body;
   
-    if (req.user.role !== "admin") {
-      return res.status(400).json({ message: "Block update" });
+        if (req.user.role !== "admin" && role) {
+          return res.status(400).json({ message: "Block update" });
+        }
+      
+        const update_user = await User.updateOne({"id":req.params._id},
+            {$set : { username, email, role }}
+        );
+    
+        if (update_cours.modifiedCount === 0) {
+            return res.send({ message: "user not found" });
+        }
+        res.json(update_user);
+    }catch(err){
+        res.status(500).json({ message: err.message });
     }
-  
-    const updatedUser = await User.updateOne({"id":req.params._id}, { username, email, role });
-    res.json(updatedUser);
+
   };
   
+
+
   const deleteUser = async (req, res) => {
-    await User.deleteOne(req.params.id);
-    res.json({ message: "Utilisateur supprimé" });
+    try {
+        const delete_user = await User.deleteOne({'id' : req.params._id} ,{})
+        res.send({message:"delete success",delete_user})
+        
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
   };
   
-  const BlockUser = async (req, res) => {
-    const user = await User.findById(req.params.id);
+
+
+const BlockUser = async (req, res) => {
+    const user = await User.findById(req.params._id);
     user.Blocked = !user.Blocked;
     await user.save();
     res.json({ message: `Utilisateur ${user.Blocked ? "bloque" : "debloque"}` });
   };
   
+
+
+
   const search = async (req, res) => {
       try {
           const { keyword } = req.query;
           const users = await User.find({
               $or: [
-                  { titre: { $regex: keyword } },
-                  { description: { $regex: keyword } }
+                  { username: { $regex: keyword } },
+                  { email: { $regex: keyword } },
+                  { role: { $regex: keyword } }
               ]
           });
   
           res.json(users);
       } catch (err) {
-          res.status(500).json({ message: "Error" });
+          res.status(500).json({ message: err.message });
       }
   };
   
