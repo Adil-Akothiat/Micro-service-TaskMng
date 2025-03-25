@@ -87,10 +87,10 @@ const updateUser = async (req, res) => {
 
 
 const BlockUser = async (req, res) => {
-    const user = await User.findById(req.params._id);
-    user.Blocked = !user.Blocked;
+    const user = await User.findById(req.params.id);
+    user.blocked = !user.blocked;
     await user.save();
-    res.json({ message: `Utilisateur ${user.Blocked ? "bloque" : "debloque"}` });
+    res.json({ message: `User ${user.blocked ? "bloque" : "debloque"}` });
   };
   
 
