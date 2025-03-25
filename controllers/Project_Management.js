@@ -1,6 +1,7 @@
 const { request, response, Router } = require("express");
 const { errorHandler } = require("../errorHandler/error");
 const projects = require("../models/ProjectModel");
+const categories = require('../models/CategorieModel')
 const welcom = (request, response) =>
   errorHandler(async () => {
     response.send("welcom to project route :)");
@@ -27,6 +28,11 @@ const create = (request, response) =>
       return response
         .status(400)
         .json({ message: "please fill all the fields" });
+    }
+    const category_exists = await categories.findById(category_id)
+    if(!category_exists)
+    {
+      return response.status(400).json({message : "category not found :("})
     }
     const new_project = await projects.insertOne({
       nom: nom,
@@ -118,11 +124,11 @@ if(status)
 }
 if(date_debut)
 {
-  filter.date_debut = {$gte : date_debut}
+  filter.date_debut = {$gte :new Date(date_debut) }
 }
 if(date_fin)
 {
-  filter.date_fin = {$lte : date_fin}
+  filter.date_fin = {$lte : new Date(date_fin)}
 }
 
 const searching = await projects.find(filter)
