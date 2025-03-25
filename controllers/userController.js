@@ -34,7 +34,7 @@ const login = async (req, res) => {
         if (!isMatch) {
             return res.status(400).json('error in password');
         }
-        const token = jwt.sign({ id: user._id , username : user.username}, process.env.SECRET);
+        const token = jwt.sign({ id: user._id , username : user.username , role:user.role}, process.env.SECRET);
         res.json({message:"Login success", token  , user : req.user});
     } catch (error) {
         res.status(500).json(error.message);
