@@ -9,13 +9,14 @@ const TaskSchema = new mongoose.Schema({
         type: String,
         default: "Write Your description here"
     },
-    date_debut: {
-        type: Date,
-        required: [true, "La date de début est requit"]
+    priorite: {
+        type: String,
+        enum: ["low", "medium", "high"],
+        default: "medium"
     },
-    date_fin: {
+    deadline: {
         type: Date,
-        required: [true, "La date de fin est requit"]
+        required: [true, "La date de deadline est requit"]
     },
     status: {
         type: String,
@@ -24,7 +25,7 @@ const TaskSchema = new mongoose.Schema({
     },
     created_at: {
         type: Date,
-        default: Date.now
+        default: Date.now()
     }
 });
 

@@ -2,8 +2,8 @@ const { errorHandler } = require("../errorHandler/error");
 const { Task, UserTask, TaskComment } = require("../models/taskManager");
 
 const createTask = (req, res)=> errorHandler(async ()=> {
-    const { titre, description, date_debut, date_fin, status } = req.body;
-    const task = new Task({ titre, description, date_debut, date_fin, status });
+    const { titre, description, priorite, deadline, status } = req.body;
+    const task = new Task({ titre, description, priorite, deadline, status });
     await task.save();
     res.status(200).json(task);
 })(req, res);
@@ -24,8 +24,8 @@ const getTask = (req, res)=> errorHandler(async ()=>{
 
 const updateTask = (req, res)=> errorHandler(async ()=>{
   const { id } = req.params;
-  const { titre, description, date_debut, date_fin, status } = req.body;
-  const task = await Task.findByIdAndUpdate(id, { titre, description, date_debut, date_fin, status }, { new: true });
+  const { titre, description, priorite, deadline, status } = req.body;
+  const task = await Task.findByIdAndUpdate(id, { titre, description, priorite, deadline, status }, { new: true });
   if(!task) {
     throw new Error("Task not found");
   }
