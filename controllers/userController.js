@@ -32,7 +32,7 @@ const login = async (req, res) => {
         }
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) {
-            return res.status(400).json('error in password');
+            return res.status(400).json('error in password or email');
         }
         const token = jwt.sign({ id: user._id , username : user.username , role:user.role}, process.env.SECRET);
         res.json({message:"Login success", token  , user : req.user});
@@ -63,7 +63,7 @@ const updateUser = async (req, res) => {
         );
     
         if (update_cours.modifiedCount === 0) {
-            return res.send({ message: "user not found" });
+            return res.status(404).json({ message: "user not found" });
         }
         res.json(update_user);
     }catch(err){
