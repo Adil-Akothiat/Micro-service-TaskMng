@@ -1,3 +1,4 @@
+const { response } = require("../../Auth/routes/userRoutes");
 const { errorHandler } = require("../errorHandler/error");
 const { Task, UserTask, TaskComment } = require("../models/taskManager");
 
@@ -41,6 +42,11 @@ const deleteTask = (req, res)=> errorHandler(async ()=>{
   res.status(200).json({ message: "Task deleted successfully" });
 })(req, res);
 
+const getUserTasks = (req, res)=> errorHandler(async ()=> {
+  const { userId } = req.params;
+  const tasks = await Task.find({ user: userId });
+  res.status(200).json(tasks);
+})(req, res);
 const assignTaskToUser = (req, res)=> errorHandler(async ()=> {
   const { id_task, id_user } = req.body;
   const task = new UserTask({ user: id_user, task: id_task });
@@ -48,10 +54,13 @@ const assignTaskToUser = (req, res)=> errorHandler(async ()=> {
   res.status(200).json(task);
 })(req, res);
 const removeTaskFromUser = (req, res)=> errorHandler(async ()=> {
-  const { id_task, id_user } = req.body;
-  const task = new UserTask({ user: id_user, task: id_task });
-  await task.save();
-  res.status(200).json(task);
+  const { id } = req.params;
+  const task = await UserTask.findById(id);
+  if(!task) {
+    throw new Error("Task not found");
+  }
+  await task.deleteOne();
+  res.status(200).json({deleted: true});
 })(req, res);
 
 const getTaskByStatus = (req, res)=> errorHandler(async ()=> {
@@ -80,7 +89,7 @@ const deleteComment = (req, res)=> errorHandler(async ()=> {
     throw new Error("Comment not found");
   }
   res.status(200).json({ message: "Comment deleted successfully" });
-})
+})(req, res);
 
 module.exports = {
   createTask,
@@ -93,5 +102,6 @@ module.exports = {
   getTaskByStatus,
   createComment,
   getComments,
-  deleteComment
+  deleteComment,
+  getUserTasks
 }
