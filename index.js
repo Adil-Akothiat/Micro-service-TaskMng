@@ -8,7 +8,7 @@ const Router = require("./routes/userRoutes");
 // app.use(cors())
 // middlewares
 app.use(express.json());
-app.use('/User', Router)
+app.use('/api/v1', Router)
 
 app.listen(process.env.PORT, (err)=> {
     if(err) {
