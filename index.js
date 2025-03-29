@@ -6,7 +6,7 @@ const Router = require("./route/taskManager");
 
 // middlewares
 app.use(express.json());
-app.use('/api/v1/', Router)
+app.use('/api/v1/', Router);
 
 app.listen(process.env.PORT, (err)=> {
     if(err) {

@@ -1,7 +1,10 @@
 const express = require("express");
 const Router = express.Router();
 const { createTask, getTasks, getTask, updateTask, deleteTask, assignTaskToUser, removeTaskFromUser, getTaskByStatus, createComment, getComments, deleteComment } = require("../controllers/taskManager");
+const { authMiddleware } = require("../middlewares/authenticate");
 
+
+Router.use(authMiddleware);
 Router.post('/task/create', createTask);
 Router.get("/tasks", getTasks);
 Router.get("/tasks/:id", getTask);
