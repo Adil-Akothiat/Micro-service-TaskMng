@@ -1,12 +1,12 @@
 const { default: mongoose, Schema } = require("mongoose");
 
 const projectSchema = new Schema({
-   nom : {type : String , require : true}, 
-   description : {type : String , require : true}, 
-   date_debut : {type : Date , require : true}, 
-   date_fin : {type : Date , require : true}, 
-   status : {type : String , require : true}, 
-   category_id : {type : mongoose.Types.ObjectId , ref : "Categorie" , require : true}, 
+   nom : {type : String , required : true}, 
+   description : {type : String , required : true}, 
+   date_debut : {type : Date , required : true}, 
+   date_fin : {type : Date , required : true}, 
+   status : {type : String , enum : ['terminer' , 'en cours'] , default : 'en cours'  , required : true}, 
+   category_id : {type : mongoose.Types.ObjectId , ref : 'Categorie' , required : true}, 
 })
 
 const ProjectModel = mongoose.model('Project' , projectSchema)
