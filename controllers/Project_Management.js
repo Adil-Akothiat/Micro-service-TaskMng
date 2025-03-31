@@ -10,7 +10,10 @@ const welcom = (request, response) =>
 //READ ALL PROJECTS
 const read_all = (request, response) =>
   errorHandler(async () => {
-    const find_all = await Projects.find();
+    const find_all =await Projects.find().populate({
+      path: "category_id",
+      select: "categ -_id",
+    })
     response.status(200).send(find_all);
   })(request, response);
 
@@ -91,7 +94,7 @@ const read_one = (request , response) =>
   errorHandler(async () => 
   {
     const project_id = request.params.id
-    const project = await Projects.findById(project_id)
+    const project = await Projects.findById(project_id).populate({path : 'category_id' , select : 'categ -_id'})
     if(!project)
     {
       return response.status(400).json({message : 'project not found :('})
@@ -120,7 +123,7 @@ const search = (request, response) =>
       filter.date_fin = { $lte: new Date(date_fin) };
     }
 
-    const searching = await Projects.find(filter);
+    const searching = await Projects.find(filter).populate({path : 'category_id' , select : "categ -_id"});
     response.send(searching);
   })(request, response);
 

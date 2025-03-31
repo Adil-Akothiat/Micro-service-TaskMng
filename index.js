@@ -6,7 +6,7 @@ const Router = require("./route/project");
 
 // middlewares
 app.use(express.json());
-app.use('/project', Router)
+app.use('/api/v1/project', Router)
 
 app.listen(process.env.PORT, (err)=> {
     if(err) {
